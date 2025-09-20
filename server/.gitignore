@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production builds
+dist/
+*/dist/
+build/
+
+# Environment variables
+.env
+*/.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+
+# Coverage directory
+coverage/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Editor directories and files
+.vscode/*
+.idea
+.DS_Store
