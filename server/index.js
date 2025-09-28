@@ -1,33 +1,30 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+import jobRoutes from './routes/jobRoutes.js';
 
-dotenv.config();
+dotenv.config(
+  {path: '.env',}
+);
+connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 // Middleware
-app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Basic route
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Government Jobs Aggregator API Server', 
-    status: 'Running successfully',
-    port: PORT 
-  });
-});
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with your frontend URL
+  creditials: true,
+};
+app.use(cors(corsOptions));
 
-// Health check route
-app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString() 
-  });
-});
+app.use('/api/v1/jobs', jobRoutes);
+
 
 // Start server
 app.listen(PORT, () => {
