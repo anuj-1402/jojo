@@ -1,9 +1,7 @@
 // server/index.js
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
-
-import app from './app.js'; // import the Express app
-
+import app from './app.js';
 
 dotenv.config({ path: '.env' });
 connectDB();
