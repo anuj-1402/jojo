@@ -4,11 +4,11 @@ const noticeSchema = new mongoose.Schema({
   site: { type: mongoose.Schema.Types.ObjectId, ref: "Site", required: true },
 
   title: { type: String, required: true },
-  url: { type: String, required: true },           // main link to notice
+  link: { type: String, required: true },           // main link to notice
   externalId: { type: String, index: true },      // hash  to avoid duplicates
   moreDetails: { type: String },                  // optional direct PDF / advertisement link
-
-  publishedAt: { type: Date },
+  location: { type: String },
+  openDate: { type: Date },
   endDate: { type: Date },
   scrapedAt: { type: Date, default: Date.now },
 
