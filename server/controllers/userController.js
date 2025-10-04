@@ -25,8 +25,9 @@ const generateAccessAndRefreshTokens = async (userId) => {
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
+  // Only check required fields (remove profile photo requirement)
   if (!name || !email || !password) {
-    throw new ApiError(400, "All fields are required");
+    throw new ApiError(400, "Name, email, and password are required");
   }
 
   const existingUser = await User.findOne({ email });
@@ -34,21 +35,23 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User already exists");
   }
 
+  // Handle profile photo if provided (make it optional)
+  let profilePhotoUrl;
   const profilePhotoLocalPath = req.files?.profilePhoto?.[0]?.path;
-  if (!profilePhotoLocalPath) {
-    throw new ApiError(400, "Profile photo is required");
-  }
-
-  const profilePhotoResponse = await uploadOnCloudinary(profilePhotoLocalPath);
-  if (!profilePhotoResponse) {
-    throw new ApiError(400, "Profile photo upload failed");
+  
+  if (profilePhotoLocalPath) {
+    const profilePhotoResponse = await uploadOnCloudinary(profilePhotoLocalPath);
+    if (!profilePhotoResponse) {
+      throw new ApiError(400, "Profile photo upload failed");
+    }
+    profilePhotoUrl = profilePhotoResponse.url;
   }
 
   const user = new User({
     name,
     email,
     passwordHash: password,
-    profilePhotoUrl: profilePhotoResponse.url,
+    profilePhotoUrl, // This will be undefined if no photo provided
   });
 
   await user.save();
@@ -214,3 +217,4 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 
   return res.status(200).json(new ApiResponse(200, user, "User profile fetched successfully"));
 });
+

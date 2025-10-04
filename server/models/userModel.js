@@ -5,9 +5,8 @@ import jwt from "jsonwebtoken";
 //sub schema for bookmarked sites with notification preference
 const bookmarkedSiteSchema = new mongoose.Schema({
   siteId: { type: mongoose.Schema.Types.ObjectId, ref: "Site", required: true },
-  notificationsEnabled: { type: Boolean, default: true },
-  bookmarkedAt: { type: Date, default: Date.now }
-});
+  notificationsEnabled: { type: Boolean, default: false }
+}, { timestamps: true });
 
 //actual user schema 
 const userSchema = new mongoose.Schema({
