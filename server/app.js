@@ -1,24 +1,29 @@
 //example// server/app.js
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import jobRoutes from './routes/jobRoutes.js';
 import siteRoutes from './routes/siteRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // frontend URL
-  credentials: true,
+  origin: true, // Allow all origins
+  credentials: true, // Allow cookies
+  optionsSuccessStatus: 200 // For legacy browser support
 };
 app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/v1/sites', siteRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // Add a root route for welcome message
 app.get('/', (req, res) => {
