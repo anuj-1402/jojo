@@ -15,11 +15,8 @@ const noticeSchema = new mongoose.Schema({
   summary: { type: String },
   rawHtml: { type: String },
 
-  isActive: { type: Boolean, default: true },
-
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+  isActive: { type: Boolean, default: true }
+}, { timestamps: true });
 
 // ensures no duplicate notice for same site
 noticeSchema.index({ site: 1, externalId: 1 }, { unique: true });
