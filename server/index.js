@@ -1,7 +1,6 @@
 // server/index.js
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
-import jobRoutes from './routes/jobRoutes.js';
 
 import app from './app.js'; // import the Express app
 

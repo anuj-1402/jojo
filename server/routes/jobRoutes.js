@@ -1,8 +1,8 @@
-import express from 'express';
-import {getJobs} from '../controllers/jobController.js';
+import express from "express";
+import { scrapeAllJobs } from "../controllers/jobController.js";
+
 const router = express.Router();
 
-router.route('/getjobs').get(getJobs);
-  
-    
-    export default router;
+router.post("/scrape", scrapeAllJobs);
+
+export default router;

@@ -5,7 +5,7 @@ const noticeSchema = new mongoose.Schema({
 
   title: { type: String, required: true },
   link: { type: String, required: true },           // main link to notice
-  externalId: { type: String, index: true },      // hash  to avoid duplicates
+  externalId: { type: String, },      // hash  to avoid duplicates
   moreDetails: { type: String },                  // optional direct PDF / advertisement link
   location: { type: String },
   openDate: { type: Date },

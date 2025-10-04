@@ -1,11 +1,13 @@
-import {saveJob} from '../utils/saveJob.js';
+import { scrapeISRO } from "../scrapers/isroScraper.js";
 
-export async function getJobs(req, res) {
-    try {
-        const jobs = await saveJob();
-        res.status(200).json( {success: 'successfully stored jobs'});
-    } catch (error) {
-        console.error("Error fetching jobs:", error);
-        res.status(500).json({ error: 'Failed to fetch jobs' });
-    }
+export async function scrapeAllJobs(req, res) {
+  try {
+    await scrapeISRO();
+    
+
+    res.status(200).json({ message: "All jobs scraped successfully" });
+  } catch (err) {
+    console.error("❌ Error scraping jobs:", err);
+    res.status(500).json({ error: err.message });
+  }
 }
