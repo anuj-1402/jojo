@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import Site from "../models/Site.js";
-import { saveNotice } from "../utils/saveNotice.js";
+import Site from "../models/sitesModel.js";
+import { saveJob} from "../utils/saveJob.js";
 
 export async function scrapeISRO() {
   const baseUrl = "https://www.isro.gov.in/ViewAllOpportunities.html";
@@ -9,7 +9,7 @@ export async function scrapeISRO() {
   const $ = cheerio.load(data);
 
   // Get site ObjectId for ISRO
-  const isroSite = await Site.findOne({ code: "ISRO" });
+  const isroSite = await Site.findOne({ name: "ISRO" });
   if (!isroSite) return console.error("ISRO site not found");
 
   $("tbody.list tr").each(async (_, el) => {
@@ -45,6 +45,6 @@ export async function scrapeISRO() {
     };
 
     // Save notice
-    await saveNotice(noticeData, isroSite._id);
+    await saveJob(noticeData, isroSite._id);
   });
 }
