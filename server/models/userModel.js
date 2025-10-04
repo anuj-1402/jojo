@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },//hashed bycrypt pass
+  profilePhotoUrl: { type: String },//profile photo URL
+  refreshToken: { type: String },//JWT refresh token
   bookmarkedSites: [bookmarkedSiteSchema], //array for bookmarked sites with notifivation preference
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

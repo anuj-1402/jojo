@@ -1,32 +1,18 @@
-import express from 'express';
-import cors from 'cors';
+// server/index.js
 import dotenv from 'dotenv';
+<<<<<<< HEAD
 import connectDB from './config/database.js';
 import jobRoutes from './routes/jobRoutes.js';
+=======
+import connectDB from './config/db.js';
+import app from './app.js'; // import the Express app
+>>>>>>> a176657141195f022bc63fdbd6a7e7e8316ddd47
 
-dotenv.config(
-  {path: '.env',}
-);
+dotenv.config({ path: '.env' });
 connectDB();
 
-const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
-// Middleware
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-const corsOptions = {
-  origin: 'http://localhost:3000', // Replace with your frontend URL
-  creditials: true,
-};
-app.use(cors(corsOptions));
-
-app.use('/api/v1/jobs', jobRoutes);
-
-
-// Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
