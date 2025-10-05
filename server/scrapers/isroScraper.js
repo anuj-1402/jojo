@@ -2,6 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import Site from "../models/sitesModel.js";
 import { saveNotice } from "../utils/saveNotice.js";
+import { generateExternalId } from "../utils/genrateExternalId.js";
 
 
 export async function scrapeISRO() {
@@ -17,17 +18,20 @@ export async function scrapeISRO() {
 
     const location = row.find("td.location").text().trim();
     const title = row.find("td.post").text().trim();
-    const advNo = row.find("td.advNo").text().trim();
+
+    const button = row.find("td.moreDetails button");
+    let link = button.attr("onclick") || "";
+    link = link.match(/'(.+?)'/)?.[1] || baseUrl;
+    link = new URL(link, baseUrl).href;
+
+    const advNo = row.find("td.advNo").text().trim() || generateExternalId(title, link);
     const openDateText = row.find("td.openDate").text().trim();
     const endDateText = row.find("td.closeDate").text().trim();
 
     const openDate = openDateText ? new Date(openDateText) : null;
     const endDate = endDateText ? new Date(endDateText) : null;
 
-    const button = row.find("td.moreDetails button");
-    let link = button.attr("onclick") || "";
-    link = link.match(/'(.+?)'/)?.[1] || baseUrl;
-    link = new URL(link, baseUrl).href;
+  
 
 
     await saveNotice({
