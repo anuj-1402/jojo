@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import jobRoutes from './routes/jobRoutes.js';
 import siteRoutes from './routes/siteRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import testRoutes from './routes/testRoutes.js';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cors(corsOptions));
 app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/v1/sites', siteRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/test', testRoutes);
 
 // Add a root route for welcome message
 app.get('/', (req, res) => {
