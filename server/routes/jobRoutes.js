@@ -1,8 +1,9 @@
 import express from "express";
-import { scrapeAllJobs } from "../controllers/jobController.js";
+import { scrapeAllJobs, scrapedDRDO } from "../controllers/jobController.js";
 
 const router = express.Router();
 
 router.post("/scrape", scrapeAllJobs);
+router.post("/drdo", scrapedDRDO);
 
 export default router;

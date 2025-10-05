@@ -16,20 +16,19 @@ export async function scrapeISRO() {
     const row = $(el);
 
     const location = row.find("td.location").text().trim();
-    const titleText = row.find("td.post").text().trim();
+    const title = row.find("td.post").text().trim();
     const advNo = row.find("td.advNo").text().trim();
     const openDateText = row.find("td.openDate").text().trim();
-    const closeDateText = row.find("td.closeDate").text().trim();
+    const endDateText = row.find("td.closeDate").text().trim();
 
     const openDate = openDateText ? new Date(openDateText) : null;
-    const closeDate = closeDateText ? new Date(closeDateText) : null;
+    const endDate = endDateText ? new Date(endDateText) : null;
 
     const button = row.find("td.moreDetails button");
     let link = button.attr("onclick") || "";
     link = link.match(/'(.+?)'/)?.[1] || baseUrl;
     link = new URL(link, baseUrl).href;
 
-    const title = `${advNo} - ${titleText}`;
 
     await saveNotice({
       title,
@@ -37,7 +36,7 @@ export async function scrapeISRO() {
       location,
       externalId: advNo,
       openDate,
-      closeDate,
+      endDate,
     }, site._id);
   });
   console.log("✅ ISRO scraping completed");

@@ -8,8 +8,8 @@ const noticeSchema = new mongoose.Schema({
   externalId: { type: String, },      // hash  to avoid duplicates
   moreDetails: { type: String },                  // optional direct PDF / advertisement link
   location: { type: String },
-  openDate: { type: Date },
-  endDate: { type: Date },
+  openDate: { type: Date},
+  endDate: { type: Date},
   scrapedAt: { type: Date, default: Date.now },
 
   summary: { type: String },
