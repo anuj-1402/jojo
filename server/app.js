@@ -2,10 +2,11 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import jobRoutes from './routes/jobRoutes.js';
+import scrapeRoutes from './routes/scrapeRoutes.js';
 import siteRoutes from './routes/siteRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import testRoutes from './routes/testRoutes.js';
+import jobRoutes from './routes/jobRoutes.js';
 
 const app = express();
 
@@ -22,10 +23,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Routes
-app.use('/api/v1/jobs', jobRoutes);
+app.use('/api/v1/scrape', scrapeRoutes);
 app.use('/api/v1/sites', siteRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/test', testRoutes);
+app.use('/api/v1/jobs', jobRoutes);
+
 
 // Add a root route for welcome message
 app.get('/', (req, res) => {

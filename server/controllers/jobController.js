@@ -1,27 +1,37 @@
-import { scrapeISRO } from "../scrapers/isroScraper.js";
-import { scrapeDRDO } from "../scrapers/drdoScraper.js";
+import Job from '../models/noticesModel.js';
+import Site from '../models/sitesModel.js';
 
-export async function scrapeAllJobs(req, res) {
+export async function getAllJobs(req, res) {
   try {
-    await scrapeISRO();
-    
-    
-
-    res.status(200).json({ message: "All jobs scraped successfully" });
+    const jobs = await Job.find().sort({ createdAt: -1 });
+    res.status(200).json({ jobs });
   } catch (err) {
-    console.error("❌ Error scraping jobs:", err);
-    res.status(500).json({ error: err.message });
+    console.error('❌ Error fetching jobs:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
-export async function scrapedDRDO(req, res) {
-    try {
-      await scrapeDRDO();
-      
-  
-      res.status(200).json({ message: "DRDO scraped and saved successfully" });
-    } catch (err) {
-      console.error("❌ Error scraping jobs:", err);
-      res.status(500).json({ error: err.message });
+
+export const getJobsBySite = async (req, res) => {
+  try {
+    const { siteName } = req.params;
+
+    // Find the site by name (case-insensitive)
+    const site = await Site.findOne({ name: new RegExp(`^${siteName}$`, "i") });
+    if (!site) {
+      return res.status(404).json({ message: "Site not found" });
     }
+
+    // Find all notices for this site
+    const jobs = await Job.find({ site: site._id })
+      .sort({ createdAt: -1 }) // newest first
+      .lean();
+
+    res.status(200).json({
+     jobs
+    });
+  } catch (error) {
+    console.error("Error fetching jobs for site:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
+};

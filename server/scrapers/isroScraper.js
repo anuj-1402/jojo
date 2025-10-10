@@ -9,7 +9,7 @@ export async function scrapeISRO() {
   const baseUrl = "https://www.isro.gov.in/ViewAllOpportunities.html";
   const { data } = await axios.get(baseUrl);
   const $ = cheerio.load(data);
-  const site = await Site.findOne({ name: "ISRO - Indian Space Research Organisation" });
+  const site = await Site.findOne({ name: "ISRO" });
   if (!site) return console.error("ISRO site not found");
 
  
