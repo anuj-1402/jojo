@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* small helpers */
+:root{--main:#1e3a8a}
+.light body{background-color:transparent}
