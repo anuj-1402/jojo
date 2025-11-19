@@ -1,5 +1,5 @@
 import { upload } from "../middlewares/multer.middleware.js";
-import asyncHandler from "../utils/asyncHandler.js";
+import  {asyncHandler}  from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";   
 import { ApiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";

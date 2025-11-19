@@ -6,7 +6,7 @@ import scrapeRoutes from './routes/scrapeRoutes.js';
 import siteRoutes from './routes/siteRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import testRoutes from './routes/testRoutes.js';
-import jobRoutes from './routes/jobRoutes.js';
+import noticeRoutes from './routes/noticeRoutes.js';
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.use('/api/v1/scrape', scrapeRoutes);
 app.use('/api/v1/sites', siteRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/test', testRoutes);
-app.use('/api/v1/jobs', jobRoutes);
+app.use('/api/v1/notices', noticeRoutes);
 
 
 // Add a root route for welcome message

@@ -7,7 +7,7 @@ import { generateExternalId } from "../utils/genrateExternalId.js";
 
 export async function scrapeDRDO() {
 
-    const url = "https://drdo.res.in/drdo/en/offerings/vacancies";
+    const url = "https://www.drdo.gov.in/drdo/en/offerings/vacancies";
   try {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import Site from '../models/sitesModel.js';
-import asyncHandler from '../utils/asyncHandler.js';
+import  {asyncHandler}  from '../utils/asyncHandler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 

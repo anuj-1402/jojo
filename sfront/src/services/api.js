@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = 'http://localhost:8080/api/v1';
+
 
 // Helper function to handle responses
 const handleResponse = async (response) => {
@@ -180,17 +181,29 @@ export const sitesAPI = {
 
 // ============== NOTICES API CALLS ==============
 
+
+
+// ============== JOBS/SCRAPING API CALLS ==============
+// ...existing code...
 export const noticesAPI = {
-  // Get notices for a specific site
-  getSiteNotices: async (siteId) => {
-    const response = await fetch(`${API_BASE_URL}/sites/${siteId}/notices`, {
+  // Get all jobs from database
+  getAllNotices: async () => {
+    const response = await fetch(`${API_BASE_URL}/notices/getnotices`, {
       method: 'GET',
       credentials: 'include'
     });
     return handleResponse(response);
   },
 
-  // Get notices from bookmarked sites
+  // Get jobs by site name
+  getNoticesBySite: async (siteName) => {
+    const response = await fetch(`${API_BASE_URL}/notices/getnotices/${siteName}`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+    return handleResponse(response);
+  },
+
   getBookmarkedNotices: async () => {
     const response = await fetch(`${API_BASE_URL}/users/bookmarked-notices`, {
       method: 'GET',
@@ -200,27 +213,27 @@ export const noticesAPI = {
   }
 };
 
-// ============== JOBS/SCRAPING API CALLS ==============
-
-export const jobsAPI = {
+// For scraping, you should probably have a separate scrapeAPI object
+export const scrapeAPI = {
   // Scrape ISRO jobs
   scrapeISRO: async () => {
-    const response = await fetch(`${API_BASE_URL}/jobs/scrape`, {
+    const response = await fetch(`${API_BASE_URL}/scrape/isro`, {
       method: 'POST',
       credentials: 'include'
     });
     return handleResponse(response);
   },
 
-  // Scrape DRDO jobs
+  // Scrape DRDO jobs  
   scrapeDRDO: async () => {
-    const response = await fetch(`${API_BASE_URL}/jobs/drdo`, {
+    const response = await fetch(`${API_BASE_URL}/scrape/drdo`, {
       method: 'POST',
       credentials: 'include'
     });
     return handleResponse(response);
   }
 };
+// ...existing code...
 
 // ============== TEST API CALLS ==============
 

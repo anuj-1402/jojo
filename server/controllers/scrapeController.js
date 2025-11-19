@@ -26,3 +26,15 @@ export async function scrapedDRDO(req, res) {
       res.status(500).json({ error: err.message });
     }
   }
+
+  export async function scrapedISRO(req, res) {
+    try {
+      await scrapeISRO();
+      
+  
+      res.status(200).json({ message: "Isro scraped and saved successfully" });
+    } catch (err) {
+      console.error("❌ Error scraping jobs:", err);
+      res.status(500).json({ error: err.message });
+    }
+  }

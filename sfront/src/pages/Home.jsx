@@ -35,7 +35,14 @@ export default function Home() {
         const sitesRes = await sitesAPI.getAllSites()
         if (sitesRes.success && sitesRes.data) {
           // Update sites count dynamically from backend
+          setsSites(sitesRes.data)
         }
+            // Fetch ALL notices for the count
+            const noticesRes = await noticesAPI.getAllNotices()
+            if (noticesRes.success && noticesRes.data) {
+              setTotalNotices(noticesRes.data.length)
+              notices(noticesRes.data)
+            }
       } catch (error) {
         console.error('Failed to fetch sites:', error)
       } finally {

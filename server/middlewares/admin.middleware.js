@@ -1,5 +1,5 @@
 import { ApiError } from "../utils/apiError.js";
-import asyncHandler from "../utils/asyncHandler.js";
+import  {asyncHandler}  from "../utils/asyncHandler.js";
 
 export const verifyAdmin = asyncHandler(async(req, _, next) => {
     try {

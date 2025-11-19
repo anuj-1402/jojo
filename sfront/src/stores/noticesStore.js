@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export const useNoticesStore = create((set) => ({
   notices: [],
-  noticesByySite: {},
+  noticesBySite: {},
   loading: false,
   error: null,
 
@@ -10,15 +10,15 @@ export const useNoticesStore = create((set) => ({
   setNotices: (notices) => set({ notices }),
 
   // Set notices for a specific site
-  setSiteNotices: (siteId, notices) => set((state) => ({
-    noticesByySite: {
-      ...state.noticesByySite,
-      [siteId]: notices
+  setSiteNotices: (siteName, notices) => set((state) => ({
+    noticesBySite: {
+      ...state.noticesBySite,
+      [siteName]: notices
     }
   })),
 
   // Get notices for a specific site
-  getSiteNotices: (siteId) => (state) => state.noticesByySite[siteId] || [],
+  getSiteNotices: (siteName) => (state) => state.noticesBySite[siteName] || [],
 
   // Add notice
   addNotice: (notice) => set((state) => ({ notices: [...state.notices, notice] })),
@@ -33,5 +33,5 @@ export const useNoticesStore = create((set) => ({
   clearError: () => set({ error: null }),
 
   // Clear notices
-  clearNotices: () => set({ notices: [], noticesByySite: {} })
+  clearNotices: () => set({ notices: [], noticesBySite: {} })
 }));

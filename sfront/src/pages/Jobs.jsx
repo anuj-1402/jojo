@@ -8,7 +8,7 @@ import { Bookmark, ExternalLink, Loader } from "lucide-react";
 
 export default function Jobs() {
   const { sites, setSites, setLoading: setSitesLoading, error: sitesError } = useSitesStore();
-  const { notices, setNotices, setLoading: setNoticesLoading } = useNoticesStore();
+  const { notices, setNotices, setSiteNotices, setLoading: setNoticesLoading } = useNoticesStore();
   const { bookmarkedSites } = useBookmarksStore();
   
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,28 +42,49 @@ export default function Jobs() {
 
   // Fetch notices for selected site
   useEffect(() => {
-    if (!selectedSite) return;
-
+    console.log('🔵 useEffect triggered - selectedSite:', selectedSite);
+    console.log('🔵 Sites array:', sites);
+    
+    if (!selectedSite) {
+   
+      return;
+    }
+  
     const fetchNotices = async () => {
       try {
         setNoticesLoading(true);
-        const response = await noticesAPI.getSiteNotices(selectedSite);
-        if (response.success && response.data) {
-          setNotices(response.data);
+        
+        // Get the site object to access its name
+        const site = sites.find(s => s._id === selectedSite);
+        console.log('🟢 Found site:', site);
+        
+        if (!site) {
+          return;
         }
+  
+        
+        // Use site name instead of ID
+        const response = await noticesAPI.getNoticesBySite(site.name);
+      
+        
+        if (response.success && response.data) {
+        
+          
+          // Store by site name
+          setSiteNotices(site.name, response.data);
+          // Also set as current notices for display
+          setNotices(response.data);}
+       
+        
       } catch (err) {
-        console.error("Failed to fetch notices:", err);
+    
+        setError(err.message);
       } finally {
         setNoticesLoading(false);
       }
     };
     fetchNotices();
-  }, [selectedSite, setNotices, setNoticesLoading]);
-
-  // Check if a notice is bookmarked
-  const isBookmarked = (noticeId) => {
-    return bookmarkedSites.some((b) => b._id === noticeId);
-  };
+  }, [selectedSite, sites, setNotices, setSiteNotices, setNoticesLoading]);
 
   // Filter notices by search term
   const filteredNotices = notices.filter(
@@ -72,6 +93,15 @@ export default function Jobs() {
       notice.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       notice.externalId?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  // Add this to monitor the notices state
+  
+
+  // Check if a notice is bookmarked
+  const isBookmarked = (noticeId) => {
+    return bookmarkedSites.some((b) => b._id === noticeId);
+  };
+
+  
 
   if (loading) {
     return (

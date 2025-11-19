@@ -1,5 +1,5 @@
 // server/controllers/siteController.js
-import asyncHandler from "../utils/asyncHandler.js";
+import {asyncHandler} from "../utils/asyncHandler.js";
 import Site from "../models/sitesModel.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
@@ -37,3 +37,43 @@ export const addSite = asyncHandler(async (req, res) => {
 });
 
 
+// Get all sites
+export const getAllSites = asyncHandler(async (req, res) => {
+  const sites = await Site.find().sort({ createdAt: -1 });
+  
+  return res.status(200).json(
+    new ApiResponse(200, sites, "Sites fetched successfully")
+  );
+});
+
+// Get single site by ID
+export const getSiteById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const site = await Site.findById(id);
+  
+  if (!site) {
+    throw new ApiError(404, "Site not found");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, site, "Site fetched successfully")
+  );
+});
+
+// Get site by name
+export const getSiteByName = asyncHandler(async (req, res) => {
+  const { name } = req.params;
+
+  const site = await Site.findOne({ 
+    name: { $regex: new RegExp(name, 'i') } 
+  });
+  
+  if (!site) {
+    throw new ApiError(404, "Site not found");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, site, "Site fetched successfully")
+  );
+});
