@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { userAPI } from "../services/api";
 import { useAuthStore } from "../stores/authStore";
 
@@ -119,12 +119,9 @@ export default function Signup() {
 
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
           Already registered?{" "}
-          <a
-            href="/login"
-            className="text-purple-600 dark:text-purple-400 font-medium hover:underline"
-          >
+          <Link to="/login" className="text-purple-600 dark:text-purple-400 font-medium hover:underline">
             Login
-          </a>
+          </Link>
         </div>
       </div>
     </div>
