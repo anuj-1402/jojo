@@ -77,7 +77,9 @@ export default function Home() {
                 <div className='flex items-center gap-1'>
                   <span className='text-yellow-500 text-lg'>★★★★★</span>
                   <span className='text-sm text-gray-600 dark:text-gray-300'>
-                    1400+ users trust us
+                  {userCount === null ? '...' : userCount}
+                  {' '}
+                      users trust us
                   </span>
                 </div>
               </div>
