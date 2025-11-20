@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes.js';
 import testRoutes from './routes/testRoutes.js';
 import noticeRoutes from './routes/noticeRoutes.js';
 import { scheduleISROScraper, scheduleDRDOScraper } from './cron/job1.js';
+import dotenv from 'dotenv';
 
 
 const app = express();
@@ -17,8 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+dotenv.config({ path: '.env' }); // Add this line if not already present
+
 const corsOptions = {
-  origin: true, // Allow all origins
+  origin: process.env.FRONTEND_URL, // Allow frontend URL from env
   credentials: true, // Allow cookies
   optionsSuccessStatus: 200 // For legacy browser support
 };
@@ -39,7 +42,8 @@ app.get('/', (req, res) => {
 
 // Error handling middleware (add this AFTER routes)
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  // You may keep this for production, or use a logger like Winston/Morgan
+  // REMOVE or REPLACE: console.error('Error:', err);
   
   // Handle ApiError
   if (err.statusCode) {

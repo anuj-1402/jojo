@@ -13,8 +13,6 @@ export const getAllNotices = asyncHandler(async (req, res) => {
 export const getNoticesBySite = asyncHandler(async (req, res) => {
   const { siteName } = req.params;
 
-  console.log('Backend: Fetching jobs for site:', siteName);
-
   // Find the site by name (case-insensitive)
   const site = await Site.findOne({ name: new RegExp(`^${siteName}$`, "i") });
   
@@ -24,14 +22,10 @@ export const getNoticesBySite = asyncHandler(async (req, res) => {
     );
   }
 
-  console.log('Backend: Found site:', site);
-
   // Find all notices for this site
   const jobs = await Job.find({ site: site._id })
     .sort({ createdAt: -1 })
     .lean();
-
-  console.log('Backend: Found jobs:', jobs.length);
 
   return res.status(200).json(
     new ApiResponse(200, jobs, "Jobs fetched successfully")
