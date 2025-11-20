@@ -1,16 +1,20 @@
+import { useAuthStore } from '../stores/authStore';
+
 const API_BASE_URL =import.meta.env.VITE_API_BASE_URL ;
 
 
 // Helper function to handle responses
 const handleResponse = async (response, retry = false, originalRequest) => {
-  if (response.status === 401 && !retry) {
-    // Try to refresh token
+  // Access Zustand store directly (works outside React components)
+  const isAuthenticated = useAuthStore.getState().isAuthenticated;
+
+  if (response.status === 401 && !retry && isAuthenticated) {
+    // Try to refresh token only if authenticated
     const refreshRes = await fetch(`${API_BASE_URL}/users/refresh`, {
       method: "POST",
       credentials: "include",
     });
     if (refreshRes.ok) {
-      // Retry original request
       if (originalRequest) {
         const retryRes = await fetch(originalRequest.url, originalRequest.options);
         return handleResponse(retryRes, true);
