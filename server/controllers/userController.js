@@ -119,7 +119,7 @@ export const loginUser = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
   const loggedInUser = await User.findById(user._id).select("-passwordHash -refreshToken");
 
-  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production" };
+  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production",sameSite:'Lax' };
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
@@ -135,7 +135,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production" };
+  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production",sameSite:'Lax' };
   return res
     .status(200)
     .clearCookie("accessToken", options)
