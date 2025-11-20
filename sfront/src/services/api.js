@@ -1,8 +1,24 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 
 // Helper function to handle responses
-const handleResponse = async (response) => {
+const handleResponse = async (response, retry = false, originalRequest) => {
+  if (response.status === 401 && !retry) {
+    // Try to refresh token
+    const refreshRes = await fetch(`${API_BASE_URL}/users/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
+    if (refreshRes.ok) {
+      // Retry original request
+      if (originalRequest) {
+        const retryRes = await fetch(originalRequest.url, originalRequest.options);
+        return handleResponse(retryRes, true);
+      }
+    } else {
+      throw new Error("Session expired. Please login again.");
+    }
+  }
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message || 'An error occurred');
@@ -143,40 +159,39 @@ export const sitesAPI = {
     return handleResponse(response);
   },
 
-  // Bookmark/Unbookmark site
-  toggleBookmark: async (siteId) => {
-    const response = await fetch(`${API_BASE_URL}/sites/bookmark`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ siteId }),
-      credentials: 'include'
-    });
-    return handleResponse(response);
-  },
-
-  // Toggle notification for bookmarked site
-  toggleNotification: async (siteId) => {
-    const response = await fetch(`${API_BASE_URL}/sites/notification`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ siteId }),
-      credentials: 'include'
-    });
-    return handleResponse(response);
+  // Get site by ID
+  getSiteById: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/sites/${id}`);
+    return handleResponse(res);
   },
 
   // Get bookmarked sites
   getBookmarkedSites: async () => {
-    const response = await fetch(`${API_BASE_URL}/users/bookmarks`, {
-      method: 'GET',
-      credentials: 'include'
+    const res = await fetch(`${API_BASE_URL}/users/bookmarks`, { credentials: "include" });
+    return handleResponse(res);
+  },
+
+  // Bookmark/Unbookmark site
+  toggleBookmark: async (siteId) => {
+    const res = await fetch(`${API_BASE_URL}/sites/bookmark`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ siteId }),
     });
-    return handleResponse(response);
-  }
+    return handleResponse(res);
+  },
+
+  // Toggle notification for bookmarked site
+  toggleNotification: async (siteId) => {
+    const res = await fetch(`${API_BASE_URL}/sites/notification`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ siteId }),
+    });
+    return handleResponse(res);
+  },
 };
 
 // ============== NOTICES API CALLS ==============
@@ -184,7 +199,7 @@ export const sitesAPI = {
 
 
 // ============== JOBS/SCRAPING API CALLS ==============
-// ...existing code...
+
 export const noticesAPI = {
   // Get all jobs from database
   getAllNotices: async () => {
@@ -197,10 +212,7 @@ export const noticesAPI = {
 
   // Get jobs by site name
   getNoticesBySite: async (siteName) => {
-    const response = await fetch(`${API_BASE_URL}/notices/getnotices/${siteName}`, {
-      method: 'GET',
-      credentials: 'include'
-    });
+    const response = await fetch(`${API_BASE_URL}/notices/getnotices/${siteName}`);
     return handleResponse(response);
   },
 
@@ -210,7 +222,13 @@ export const noticesAPI = {
       credentials: 'include'
     });
     return handleResponse(response);
-  }
+  },
+
+  // Get notices by site ID
+  getNoticesBySiteId: async (siteId) => {
+    const res = await fetch(`${API_BASE_URL}/sites/${siteId}/notices`);
+    return handleResponse(res);
+  },
 };
 
 // For scraping, you should probably have a separate scrapeAPI object
@@ -233,7 +251,6 @@ export const scrapeAPI = {
     return handleResponse(response);
   }
 };
-// ...existing code...
 
 // ============== TEST API CALLS ==============
 

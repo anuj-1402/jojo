@@ -24,6 +24,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Jobs", path: "/jobs" },
+    { name: "All Sites", path: "/sites" }, // <-- Added this line
     { name: "Bookmarked", path: "/bookmarked" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },

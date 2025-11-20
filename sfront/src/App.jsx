@@ -7,6 +7,11 @@ import Jobs from './pages/Jobs'
 import Bookmarks from './pages/Bookmarks'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Sites from './pages/Sites'
+import Site from './pages/Site'
+
 import { useAuthStore } from './stores/authStore'
 import { userAPI } from './services/api'
 
@@ -43,6 +48,10 @@ export default function App(){
           <Route path='/bookmarked' element={<Bookmarks/>} />
           <Route path='/about' element={<About/>} />
           <Route path='/contact' element={<Contact/>} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/sites' element={<Sites />} />
+          <Route path='/sites/:id' element={<Site />} />
         </Routes>
       </main>
       <Footer />

@@ -142,7 +142,9 @@ export default function Bookmarks() {
                   >
                     <div className="flex-1">
                       <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                        {bookmark.siteId?.name}
+                        <Link to={`/sites/${bookmark.siteId?._id}`} className="hover:underline text-blue-600 dark:text-blue-400">
+                          {bookmark.siteId?.name}
+                        </Link>
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
                         {bookmark.siteId?.description}

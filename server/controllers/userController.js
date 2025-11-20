@@ -4,6 +4,7 @@ import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import User from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 
 // Helper to generate access and refresh tokens
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -216,5 +217,38 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
     .populate("bookmarkedSites.siteId", "name baseUrl logoUrl");
 
   return res.status(200).json(new ApiResponse(200, user, "User profile fetched successfully"));
+});
+
+// Get bookmarked sites (PROTECTED)
+export const getBookmarkedSites = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+    .populate('bookmarkedSites.siteId', 'name baseUrl logoUrl description');
+  return res.status(200).json(
+    new ApiResponse(200, user.bookmarkedSites, "Bookmarked sites fetched successfully")
+  );
+});
+
+// Refresh access token (PUBLIC)
+export const refreshAccessToken = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) throw new ApiError(401, "No refresh token");
+
+  let decoded;
+  try {
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  } catch {
+    throw new ApiError(401, "Invalid refresh token");
+  }
+
+  const user = await User.findById(decoded._id);
+  if (!user || user.refreshToken !== refreshToken) throw new ApiError(401, "Invalid refresh token");
+
+  const accessToken = user.generateAccessToken();
+
+  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production" };
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .json(new ApiResponse(200, {}, "Tokens refreshed"));
 });
 

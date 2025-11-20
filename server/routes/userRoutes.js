@@ -9,7 +9,9 @@ import {
   logoutUser, 
   updateUserProfile, 
   changePassword, 
-  getCurrentUser 
+  getCurrentUser,
+  getBookmarkedSites,
+  refreshAccessToken
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -26,5 +28,7 @@ router.post('/logout', verifyJWT, logoutUser);
 router.get('/profile', verifyJWT, getCurrentUser);
 router.patch('/update-profile', verifyJWT, upload.fields([{ name: 'profilePhoto', maxCount: 1 }]), updateUserProfile);
 router.patch('/change-password', verifyJWT, changePassword);
+router.get('/bookmarks', verifyJWT, getBookmarkedSites);
+router.post('/refresh', refreshAccessToken);
 
 export default router;
