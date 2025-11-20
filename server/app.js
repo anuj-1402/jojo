@@ -7,7 +7,8 @@ import siteRoutes from './routes/siteRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import testRoutes from './routes/testRoutes.js';
 import noticeRoutes from './routes/noticeRoutes.js';
-import { scheduleISROScraper, scheduleDRDOScraper, scheduleRenderPing } from './cron/job1.js';
+import { scheduleISROScraper, scheduleDRDOScraper } from './cron/job1.js';
+import {scheduleRenderPing} from './cron/rendercron.js';
 import dotenv from 'dotenv';
 
 
