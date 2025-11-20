@@ -7,6 +7,8 @@ import siteRoutes from './routes/siteRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import testRoutes from './routes/testRoutes.js';
 import noticeRoutes from './routes/noticeRoutes.js';
+import { scheduleISROScraper, scheduleDRDOScraper } from './cron/job1.js';
+
 
 const app = express();
 
@@ -54,6 +56,9 @@ app.use((err, req, res, next) => {
     message: 'Internal Server Error'
   });
 });
+
+scheduleISROScraper();
+scheduleDRDOScraper();
 
 // Export the app
 export default app;
