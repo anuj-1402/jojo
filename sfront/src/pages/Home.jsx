@@ -128,25 +128,67 @@ export default function Home() {
           transition={{ duration: 0.8 }}
           className='container mx-auto max-w-7xl'
         >
-          <div className='grid md:grid-cols-3 gap-6'>
-            <Feature
-              title='Smart Search Engine'
-              desc='Our AI-powered search helps you find the perfect job openings that match your skills instantly.'
-              bgColor='bg-gradient-to-br from-blue-500 to-blue-600'
-              illustration='🔍'
-            />
-            <Feature
-              title='Real-Time Updates'
-              desc='Get instant alerts about new openings from government and private sectors.'
-              bgColor='bg-gradient-to-br from-green-500 to-green-600'
-              illustration='📊'
-            />
-            <Feature
-              title='Easy Bookmarking'
-              desc='Save and organize your favorite jobs and companies in one click.'
-              bgColor='bg-gradient-to-br from-red-500 to-pink-600'
-              illustration='🎯'
-            />
+          <div className='mt-16 grid md:grid-cols-3 gap-8'>
+            {/* Smart Engine */}
+            <div className='bg-white dark:bg-gray-900 rounded-xl shadow p-6 flex flex-col items-center text-center'>
+              <div className='mb-4 text-purple-600'>
+                <svg width='36' height='36' fill='none' viewBox='0 0 24 24'>
+                  <path
+                    d='M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m12.02 0l1.41-1.41M6.34 6.34L4.93 4.93'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Smart Job Engine</h3>
+              <p className='text-gray-600 dark:text-gray-300'>
+                Our intelligent engine scans top government and research sites to bring you the latest job opportunities, tailored to your interests.
+              </p>
+            </div>
+
+            {/* Real-time Updates */}
+            <div className='bg-white dark:bg-gray-900 rounded-xl shadow p-6 flex flex-col items-center text-center'>
+              <div className='mb-4 text-purple-600'>
+                <svg width='36' height='36' fill='none' viewBox='0 0 24 24'>
+                  <path
+                    d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Real-time Updates</h3>
+              <p className='text-gray-600 dark:text-gray-300'>
+                Get notified instantly when new jobs are posted.{' '}
+                <span className='font-medium text-purple-600'>
+                  You’ll also receive email alerts
+                </span>{' '}
+                for your bookmarked sites, so you never miss an opportunity.
+              </p>
+            </div>
+
+            {/* Bookmarks */}
+            <div className='bg-white dark:bg-gray-900 rounded-xl shadow p-6 flex flex-col items-center text-center'>
+              <div className='mb-4 text-purple-600'>
+                <svg width='36' height='36' fill='none' viewBox='0 0 24 24'>
+                  <path
+                    d='M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Easy Bookmarks</h3>
+              <p className='text-gray-600 dark:text-gray-300'>
+                Bookmark your favorite job boards and organizations. Manage your list and enable notifications for the updates that matter most to you.
+              </p>
+            </div>
           </div>
         </motion.div>
       </section>
