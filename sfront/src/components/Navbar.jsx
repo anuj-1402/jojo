@@ -3,12 +3,14 @@ import { Link, NavLink } from "react-router-dom";
 import { Menu, X, Moon, Sun, LogOut, LogIn, User } from "lucide-react";
 import { useAuthStore } from "../stores/authStore";
 import { userAPI } from "../services/api";
+import ProfileModal from "./ProfileModal";
 
 export default function Navbar() {
   const [dark, setDark] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, isAuthenticated, logout } = useAuthStore();
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     if (dark) document.documentElement.classList.add("dark");
@@ -89,31 +91,45 @@ export default function Navbar() {
           </button>
 
           {/* User Status */}
-          {isAuthenticated && user ? (
-            <div className="hidden md:flex items-center gap-4">
-              <div className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
-                <User size={16} />
-                <span>{user.name}</span>
+          <div className="hidden md:flex items-center gap-4">
+            {isAuthenticated && user ? (
+              <>
+                <button
+                  className="flex items-center gap-2 focus:outline-none"
+                  onClick={() => setShowProfileModal(true)}
+                  title="View or update profile"
+                >
+                  {user.profilePhotoUrl ? (
+                    <img
+                      src={user.profilePhotoUrl}
+                      alt={user.name}
+                      className="w-8 h-8 rounded-full border border-gray-300 object-cover"
+                    />
+                  ) : (
+                    <User size={28} className="text-gray-600 dark:text-gray-300" />
+                  )}
+                  <span className="text-sm text-gray-600 dark:text-gray-300">{user.name}</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-2 transition"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <div className="hidden md:flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="px-4 py-2 border border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition flex items-center gap-2"
+                >
+                  <LogIn size={16} />
+                  Login
+                </Link>
               </div>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-2 transition"
-              >
-                <LogOut size={16} />
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className="hidden md:flex items-center gap-2">
-              <Link
-                to="/login"
-                className="px-4 py-2 border border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition flex items-center gap-2"
-              >
-                <LogIn size={16} />
-                Login
-              </Link>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -168,6 +184,9 @@ export default function Navbar() {
             )}
           </nav>
         </div>
+      )}
+      {showProfileModal && (
+        <ProfileModal user={user} onClose={() => setShowProfileModal(false)} />
       )}
     </header>
   );
