@@ -22,6 +22,14 @@ const generateAccessAndRefreshTokens = async (userId) => {
   }
 };
 
+// Helper for cookie options
+const isProduction = process.env.NODE_ENV === "production";
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax"
+};
+
 // Register user (PUBLIC)
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -119,11 +127,10 @@ export const loginUser = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
   const loggedInUser = await User.findById(user._id).select("-passwordHash -refreshToken");
 
-  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production",sameSite:'Lax' };
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
     .json(new ApiResponse(200, { user: loggedInUser, accessToken, refreshToken }, "User logged in successfully"));
 });
 
@@ -135,11 +142,10 @@ export const logoutUser = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production",sameSite:'Lax' };
   return res
     .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
@@ -245,10 +251,9 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 
   const accessToken = user.generateAccessToken();
 
-  const options = { httpOnly: true, secure: process.env.NODE_ENV === "production" };
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
+    .cookie("accessToken", accessToken, cookieOptions)
     .json(new ApiResponse(200, {}, "Tokens refreshed"));
 });
 
