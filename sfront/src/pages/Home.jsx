@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import JobIimage from '../assets/Jobimage'
 import { useSitesStore } from '../stores/sitesStore'
 import { useNoticesStore } from '../stores/noticesStore'
-import { sitesAPI, noticesAPI } from '../services/api'
+import { sitesAPI, noticesAPI, userAPI } from '../services/api'
 
 
 function Feature({ title, desc, bgColor, illustration }) {
@@ -24,9 +24,10 @@ function Feature({ title, desc, bgColor, illustration }) {
 }
 
 export default function Home() {
-  const { sites } = useSitesStore()
-  const { notices } = useNoticesStore()
+  const { sites, setSites } = useSitesStore()
+  const { notices, setNotices } = useNoticesStore()
   const [loading, setLoading] = useState(true)
+  const [userCount, setUserCount] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,15 +35,15 @@ export default function Home() {
         setLoading(true)
         const sitesRes = await sitesAPI.getAllSites()
         if (sitesRes.success && sitesRes.data) {
-          // Update sites count dynamically from backend
-          setsSites(sitesRes.data)
+          setSites(sitesRes.data)
         }
-            // Fetch ALL notices for the count
-            const noticesRes = await noticesAPI.getAllNotices()
-            if (noticesRes.success && noticesRes.data) {
-              setTotalNotices(noticesRes.data.length)
-              notices(noticesRes.data)
-            }
+        const noticesRes = await noticesAPI.getAllNotices()
+        if (noticesRes.success && noticesRes.data) {
+          setNotices(noticesRes.data)
+        }
+        userAPI.getUserCount().then(res => {
+          if (res.count !== undefined) setUserCount(res.count);
+        });
       } catch (error) {
         console.error('Failed to fetch sites:', error)
       } finally {
@@ -50,7 +51,7 @@ export default function Home() {
       }
     }
     fetchData()
-  }, [])
+  }, [setSites, setNotices])
   return (
     <div className='bg-gradient-to-b from-orange-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen'>
       {/* Hero Section */}
@@ -202,21 +203,28 @@ export default function Home() {
           className='container mx-auto max-w-7xl'
         >
           <div className='grid md:grid-cols-4 gap-8 text-center'>
-            {[
-              { num: sites.length || '500+', label: 'Active Sites' },
-              { num: notices.length || '5000+', label: 'Job Listings' },
-              { num: '1400+', label: 'Happy Users' },
-              { num: 'Daily', label: 'Updates' }
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.1 }}
-                className='cursor-default'
-              >
-                <div className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>{stat.num}</div>
-                <div className='text-gray-600 dark:text-gray-300'>{stat.label}</div>
-              </motion.div>
-            ))}
+            <motion.div whileHover={{ scale: 1.1 }} className='cursor-default'>
+              <div className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+                {loading ? '...' : sites.length}
+              </div>
+              <div className='text-gray-600 dark:text-gray-300'>Active Sites</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} className='cursor-default'>
+              <div className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+                {loading ? '...' : notices.length}
+              </div>
+              <div className='text-gray-600 dark:text-gray-300'>Job Listings</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} className='cursor-default'>
+              <div className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+                {userCount === null ? '...' : userCount}
+              </div>
+              <div className='text-gray-600 dark:text-gray-300'>Happy Users</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} className='cursor-default'>
+              <div className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>Daily</div>
+              <div className='text-gray-600 dark:text-gray-300'>Updates</div>
+            </motion.div>
           </div>
         </motion.div>
       </section>

@@ -13,6 +13,7 @@ import {
   getBookmarkedSites,
   refreshAccessToken
 } from '../controllers/userController.js';
+import User from '../models/userModel.js'; // Import the User model
 
 const router = express.Router();
 
@@ -30,5 +31,9 @@ router.patch('/update-profile', verifyJWT, upload.fields([{ name: 'profilePhoto'
 router.patch('/change-password', verifyJWT, changePassword);
 router.get('/bookmarks', verifyJWT, getBookmarkedSites);
 router.post('/refresh', refreshAccessToken);
+router.get('/count', async (req, res) => {
+  const count = await User.countDocuments();
+  res.json({ count });
+});
 
 export default router;

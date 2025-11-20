@@ -122,6 +122,12 @@ export const userAPI = {
       credentials: 'include'
     });
     return handleResponse(response);
+  },
+
+  // Get user count
+  getUserCount: async () => {
+    const res = await fetch(`${API_BASE_URL}/users/count`);
+    return res.json();
   }
 };
 
